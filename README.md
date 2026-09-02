@@ -114,9 +114,7 @@ used here instead — see `src/utils.py`).
 
 <img width="1350" height="1260" alt="flood_extent_classification_map" src="https://github.com/user-attachments/assets/89eabc57-9b58-4ecf-9d16-f233a37fa98c" />
 
-## Nepal flood 2025-2026
-
-Geospatial Assessment of Flood-Affected Areas in Nepal
+## Geospatial Assessment of Flood-Affected Areas in Nepal
 Using Multi-Temporal Satellite Imagery & Machine Learning (2024–2026)
 Case Study: Kathmandu Valley / Koshi-Bagmati Basin
 1. Executive Summary
@@ -145,16 +143,20 @@ A Random Forest classifier (300 trees, max depth 18, class-balanced) was trained
 The full-scene classification was rendered as a georeferenced map (WGS84 lon/lat), zonal flood statistics were tabulated across five basin sub-zones, and the binary flood-extent mask was vectorized to polygons (marching-squares contouring) and exported as GeoJSON for use in downstream GIS software (QGIS/ArcGIS).
 4. Results
 4.1 Multi-temporal change detection
- 
+   <img width="906" height="323" alt="image" src="https://github.com/user-attachments/assets/d58f7655-a190-45fe-bf99-4975d7a4e688" />
+   
 Figure 1. Pre-flood, post-flood, and MNDWI change (flood signal) composites.
 4.2 Flood extent & land-cover classification map
- 
+<img width="672" height="627" alt="image" src="https://github.com/user-attachments/assets/1ffe8f6c-5808-45a9-8b3d-bedb928580a5" />
+
 Figure 2. Georeferenced land-cover/flood classification map with scale bar and north arrow.
 4.3 Classification accuracy
 Held-out test accuracy: 0.9969  |  Weighted F1-score: 0.9969
- 
+<img width="594" height="503" alt="image" src="https://github.com/user-attachments/assets/9bafe4f2-3834-4418-906b-8be9b9e2ac16" />
+
 Figure 3. Confusion matrix, held-out test pixels.
- 
+<img width="672" height="466" alt="image" src="https://github.com/user-attachments/assets/a3624b9e-750f-4e89-ad57-8c97c541491e" />
+
 Figure 4. Random Forest feature importance — MNDWI and its bi-temporal change dominate flood discrimination, as expected.
 4.4 Mapped area by class
 Land-cover / flood class	Pixels	Area (km²)	% of scene
@@ -166,7 +168,8 @@ forest	238,795	1345.48	91.09%
 barren	1,924	10.84	0.73%
 
 4.5 Zonal flood impact
- 
+<img width="719" height="405" alt="image" src="https://github.com/user-attachments/assets/e99defa9-33a7-4d0b-ad46-d63cd19c6e82" />
+
 Figure 5. Flooded area as a percentage of each zone.
 Zone	Flooded area (km²)	Existing water (km²)	% of zone flooded
 Kathmandu Metro (core)	18.48	2.23	20.0%
