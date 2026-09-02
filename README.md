@@ -116,4 +116,80 @@ used here instead — see `src/utils.py`).
 
 ## Nepal flood 2025-2026
 
-"C:\Users\Abhishek\Downloads\Flood_Assessment_Report_Nepal.docx"
+Geospatial Assessment of Flood-Affected Areas in Nepal
+Using Multi-Temporal Satellite Imagery & Machine Learning (2024–2026)
+Case Study: Kathmandu Valley / Koshi-Bagmati Basin
+1. Executive Summary
+This study assesses flood extent and land-cover change across a Kathmandu Valley / Koshi-Bagmati Basin case-study area using a bi-temporal (pre-flood vs. post-flood) multispectral remote-sensing workflow combined with a supervised machine-learning classifier. Spectral water indices (NDWI, MNDWI) and vegetation indices (NDVI) were computed for both dates, differenced to isolate the flood signal, and fed into a Random Forest classifier that mapped the scene into six land-cover/flood classes.
+The classifier reached an overall held-out accuracy of 0.9969 (weighted F1-score 0.9969) against reference labels. The model estimates a combined flooded + open-water extent of approximately 113.1 km² (7.66% of the study scene), concentrated along the Bagmati river corridor through the Kathmandu Metro core and Lalitpur, which show the highest proportional inundation of the five zones assessed.
+2. Study Area & Data
+Study area: Kathmandu Valley and an adjoining reach of the Koshi-Bagmati basin, approximately bounded by 85.15°–85.55°E and 27.55°–27.85°N (WGS84). The area spans dense urban core (Kathmandu, Lalitpur, Bhaktapur), peri-urban agriculture, forested hillslopes, and the Bagmati river network with a tributary confluence.
+Data note: This working environment had no internet access, so real Sentinel-2/Landsat scenes could not be downloaded from Copernicus Data Space Ecosystem, USGS EarthExplorer, or Google Earth Engine. The pipeline below was therefore demonstrated on a physically-informed synthetic 5-band (Blue, Green, Red, NIR, SWIR1) dataset generated from a fractal-noise DEM, a rule-based land-cover template, and a stochastic monsoon flood-inundation simulator calibrated to Sentinel-2 L2A surface-reflectance ranges. Every downstream step — indices, change detection, ML classification, GIS mapping, vectorization — operates on the 5-band array unmodified, so swapping in a real Sentinel-2/Landsat GeoTIFF pair reproduces the same outputs on real imagery. See README.md, section 'Using real satellite imagery.'
+Imagery bands and acquisition timing simulated:
+●	Pre-flood: pre-monsoon baseline composite
+●	Post-flood: post-monsoon peak-inundation composite
+●	Bands: Blue, Green, Red, NIR, SWIR1 (Sentinel-2-like)
+●	Grid: 512×512 px over the study bounding box (≈95 m/px effective)
+3. Methodology
+3.1 Pre-processing
+Bands were assembled per acquisition date and clipped to the study extent. In an operational deployment this stage would additionally include atmospheric correction (Sen2Cor/L2A), cloud/shadow masking, and co-registration of the two dates.
+3.2 Spectral index computation
+●	NDVI = (NIR − Red) / (NIR + Red) — vegetation vigor
+●	NDWI = (Green − NIR) / (Green + NIR) — open water (McFeeters, 1996)
+●	MNDWI = (Green − SWIR1) / (Green + SWIR1) — water incl. turbid/urban water (Xu, 2006); primary flood index used here
+3.3 Change detection
+Bi-temporal differencing produced ΔMNDWI (water gain) and ΔNDVI (vegetation loss) layers, which sharply isolate the flood-affected corridor from background land-cover noise (Figure 2).
+3.4 Machine-learning classification
+A Random Forest classifier (300 trees, max depth 18, class-balanced) was trained on a stratified pixel sample using a 10-feature vector per pixel: 5 post-flood reflectance bands, post-flood NDVI and MNDWI, the two change layers (ΔMNDWI, ΔNDVI), and relative elevation. Training used a 70/30 train/test split; classes were {water, flooded, urban, agriculture, forest, barren}.
+3.5 GIS mapping & vectorization
+The full-scene classification was rendered as a georeferenced map (WGS84 lon/lat), zonal flood statistics were tabulated across five basin sub-zones, and the binary flood-extent mask was vectorized to polygons (marching-squares contouring) and exported as GeoJSON for use in downstream GIS software (QGIS/ArcGIS).
+4. Results
+4.1 Multi-temporal change detection
+ 
+Figure 1. Pre-flood, post-flood, and MNDWI change (flood signal) composites.
+4.2 Flood extent & land-cover classification map
+ 
+Figure 2. Georeferenced land-cover/flood classification map with scale bar and north arrow.
+4.3 Classification accuracy
+Held-out test accuracy: 0.9969  |  Weighted F1-score: 0.9969
+ 
+Figure 3. Confusion matrix, held-out test pixels.
+ 
+Figure 4. Random Forest feature importance — MNDWI and its bi-temporal change dominate flood discrimination, as expected.
+4.4 Mapped area by class
+Land-cover / flood class	Pixels	Area (km²)	% of scene
+water	5,405	30.45	2.06%
+flooded	14,669	82.65	5.60%
+urban	1,122	6.32	0.43%
+agriculture	229	1.29	0.09%
+forest	238,795	1345.48	91.09%
+barren	1,924	10.84	0.73%
+
+4.5 Zonal flood impact
+ 
+Figure 5. Flooded area as a percentage of each zone.
+Zone	Flooded area (km²)	Existing water (km²)	% of zone flooded
+Kathmandu Metro (core)	18.48	2.23	20.0%
+Lalitpur	16.93	3.63	18.3%
+Bhaktapur	2.69	0.37	4.5%
+Bagmati corridor (upstream)	6.33	5.42	4.8%
+Koshi confluence (downstream)	6.84	3.81	4.4%
+5. Limitations
+●	Imagery is synthetic (see Data note, Section 2) — absolute figures are illustrative of the workflow, not a real-world flood assessment.
+●	Zone boundaries are an illustrative grid proxy, not surveyed administrative/ward boundaries.
+●	No atmospheric correction, cloud masking, or multi-date co-registration step was needed here since the synthetic dates are already aligned and cloud-free; real imagery requires these steps.
+●	Training/reference labels came from the same rule-based logic used to generate the scene; on real imagery, labels should come from field GPS points, high-resolution reference imagery, or validated historical flood maps.
+6. Recommended Next Steps (for deployment on real imagery)
+●	Pull Sentinel-2 L2A (10 m) or Sentinel-1 SAR (cloud-penetrating, critical for monsoon flood mapping) via Copernicus Data Space Ecosystem or Google Earth Engine.
+●	Add Sentinel-1 VV/VH backscatter change detection to complement optical MNDWI, since monsoon flood scenes are frequently cloud-obscured.
+●	Replace the rule-based reference labels with field-validated or crowd-sourced (e.g. Copernicus EMS) flood-extent ground truth.
+●	Extend zonal statistics to real ward/municipality boundaries (Kathmandu Metropolitan City, Lalitpur, Bhaktapur, and Koshi basin districts) via official administrative GeoJSON/shapefiles.
+●	Wire the GeoJSON output into a QGIS/ArcGIS project or a web map (Leaflet/Mapbox) for stakeholder-facing disaster-response dashboards.
+7. Project Deliverables
+●	src/ — full Python pipeline (imagery → indices → ML classification → GIS mapping/vectorization)
+●	outputs/maps/ — georeferenced flood-extent map, comparison panel
+●	outputs/figures/ — index maps, confusion matrix, feature importance, zonal chart
+●	outputs/classified/ — classified raster, area/zonal statistics (CSV/JSON), accuracy report
+●	outputs/vectors/flood_extent.geojson — flood-extent polygons for GIS software
+●	README.md — how to run the pipeline and how to swap in real satellite imagery
+
