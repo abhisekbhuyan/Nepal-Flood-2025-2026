@@ -1,0 +1,15 @@
+numpy
+scipy
+scikit-learn
+scikit-image
+matplotlib
+pandas
+Pillow
+tifffile
+
+# For production use with real satellite imagery (not required for this
+# synthetic demo run; install if available):
+# rasterio
+# geopandas
+# shapely
+# pyproj

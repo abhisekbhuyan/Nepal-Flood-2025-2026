@@ -1,0 +1,8 @@
+{
+  "water": 0,
+  "flooded": 1,
+  "urban": 2,
+  "agriculture": 3,
+  "forest": 4,
+  "barren": 5
+}
