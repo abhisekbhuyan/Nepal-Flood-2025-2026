@@ -110,3 +110,10 @@ used here instead — see `src/utils.py`).
 
 <img width="2100" height="750" alt="multitemporal_comparison_panel" src="https://github.com/user-attachments/assets/e198925f-b5e9-42ea-80aa-35d344e19b6f" />
 
+## Flood Extent & Land-Cover Classification
+
+<img width="1350" height="1260" alt="flood_extent_classification_map" src="https://github.com/user-attachments/assets/89eabc57-9b58-4ecf-9d16-f233a37fa98c" />
+
+## Nepal flood 2025-2026
+
+"C:\Users\Abhishek\Downloads\Flood_Assessment_Report_Nepal.docx"
