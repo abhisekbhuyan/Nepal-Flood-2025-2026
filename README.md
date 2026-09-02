@@ -105,3 +105,8 @@ For production use with real satellite data, add `rasterio` and `geopandas`
 for proper CRS/reprojection handling (this environment could not install
 them without internet access, so lightweight numpy-based equivalents are
 used here instead — see `src/utils.py`).
+
+## Multitemporal_comparison_panel
+
+<img width="2100" height="750" alt="multitemporal_comparison_panel" src="https://github.com/user-attachments/assets/e198925f-b5e9-42ea-80aa-35d344e19b6f" />
+
